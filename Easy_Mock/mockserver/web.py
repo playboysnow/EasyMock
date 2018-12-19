@@ -7,6 +7,7 @@ import logging
 import json,yaml
 import time
 import platform
+from surgery import surgery
 reload(sys)
 sys.setdefaultencoding('UTF-8')
 #sys.setdefaultencoding('gb2312')
@@ -20,6 +21,7 @@ class web(object):
         #sys_type=platform.architecture()[1]
         self.sys_type=platform.system()   #"Windows,Linux"
         pass
+    
     global req
     req={"url":"/123","response":{"code ":"ok "},"type":1,"method":["POST"],"sleeptime":0,"host":"0.0.0.0","port":5001}
     global file 
@@ -51,7 +53,7 @@ class web(object):
         #根据不同类型执行不同类型文件
         if mock_type==1:
             #调用shell 执行常规方式
-            system(file,js_data)
+            surgery().system(file,eval(data))
             pass
         elif mock_type==2:
             #调用
@@ -61,17 +63,17 @@ class web(object):
         else:
             pass
 
-        return  json.dumps(response)
+        #return  json.dumps(response)
     @app.route('/mockstop',methods=["POST"])
     
-    def mockstop():
+    def mockstop(self):
         data=request.get_data()
         js_data=json.loads(data)
         mock_type=js_data('type')
         #根据不同类型执行不同类型文件
         if mock_type==1:
             #调用shell 执行常规方式
-            system(file,js_data)
+            web().system(self,file,js_data)
             pass
         elif mock_type==2:
             #调用
@@ -85,7 +87,8 @@ class web(object):
     def run(self,debug=False):
         app.run(host=host,port=port,debug=debug)
         pass
-
+    
+    #global system
     def system(self,file,req):
         if self.sys_type=="Windows":
             print 'python2 %s  %s ' % (file, req)
@@ -98,6 +101,7 @@ class web(object):
                 return self.res_succ
 
 
+    
 if __name__=='__main__':
     #web().system(file,req)
     web().run()
