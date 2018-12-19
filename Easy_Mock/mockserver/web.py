@@ -22,6 +22,8 @@ class web(object):
         pass
     global req
     req={"url":"/123","response":{"code ":"ok "},"type":1,"method":["POST"],"sleeptime":0,"host":"0.0.0.0","port":5001}
+    global file 
+    file='runserver.py'
     global port
     port=8080
     global host
@@ -46,6 +48,7 @@ class web(object):
         #根据不同类型执行不同类型文件
         if mock_type==1:
             #调用shell 执行常规方式
+            self.system(js_data)
             pass
         elif mock_type==2:
             #调用
@@ -60,19 +63,20 @@ class web(object):
         app.run(host=host,port=port,debug=debug)
         pass
 
-    def system(self,req):
+    def system(self,file,req):
         if self.sys_type=="Windows":
-            print 'python2 runserver.py %s ' % req
-            if os.system('python2 runserver.py "'"%s"'" ' % req) !=0:
+            print 'python2 %s  %s ' % (file, req)
+
+            if os.system('python2  %s  "'"%s"'" ' % (file , req)) !=0:
                 print self.res_fail
                 return self.res_fail
         elif self.sys_type=="Linux":
-            if os.system('python runserver.py "'"%s"'" ' % req) !=0:
+            if os.system('python (%s  "'"%s"'" )' % (file, req)) !=0:
                 return self.res_fail
 
 
 if __name__=='__main__':
-    web().system(req)
+    web().system(file,req)
     
 
 
