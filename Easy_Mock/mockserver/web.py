@@ -4,7 +4,7 @@
 from flask import Flask,render_template,request,redirect
 import urllib,requests,os,sys
 import logging
-import json
+import json,yaml
 import time
 import platform
 reload(sys)
@@ -39,16 +39,39 @@ class web(object):
         return render_template("index.html")
 
 
-    @app.route('/mockserver',methods=["POST"])
+    @app.route('/mockstart',methods=["POST"])
     
-    def mock():
+    def mockstart():
+        data=request.get_data()
+        #print data,eval(data)
+        #js_data=json.loads(data)
+        #js_data=yaml.safe_load(data)
+        #print js_data
+        mock_type=eval(data)['type']
+        #根据不同类型执行不同类型文件
+        if mock_type==1:
+            #调用shell 执行常规方式
+            system(file,js_data)
+            pass
+        elif mock_type==2:
+            #调用
+            pass
+        elif mock_type==3:
+            pass
+        else:
+            pass
+
+        return  json.dumps(response)
+    @app.route('/mockstop',methods=["POST"])
+    
+    def mockstop():
         data=request.get_data()
         js_data=json.loads(data)
         mock_type=js_data('type')
         #根据不同类型执行不同类型文件
         if mock_type==1:
             #调用shell 执行常规方式
-            self.system(js_data)
+            system(file,js_data)
             pass
         elif mock_type==2:
             #调用
@@ -67,16 +90,17 @@ class web(object):
         if self.sys_type=="Windows":
             print 'python2 %s  %s ' % (file, req)
 
-            if os.system('python2  %s  "'"%s"'" ' % (file , req)) !=0:
-                print self.res_fail
-                return self.res_fail
+            if os.system('python2  %s  "'"%s"'" ' % (file , req)) ==0:
+                #print self.res_fail
+                return self.res_succ
         elif self.sys_type=="Linux":
-            if os.system('python (%s  "'"%s"'" )' % (file, req)) !=0:
-                return self.res_fail
+            if os.system('python (%s  "'"%s"'" )' % (file, req)) ==0:
+                return self.res_succ
 
 
 if __name__=='__main__':
-    web().system(file,req)
+    #web().system(file,req)
+    web().run()
     
 
 
