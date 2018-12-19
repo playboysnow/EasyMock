@@ -53,8 +53,10 @@ class web(object):
         #根据不同类型执行不同类型文件
         if mock_type==1:
             #调用shell 执行常规方式
+            #return json.dumps(eval(data)['response'])  启动后 如何响应状态
             surgery().system(file,eval(data))
-            pass
+            return  json.dumps(eval(data)['response'])
+            
         elif mock_type==2:
             #调用
             pass
@@ -63,7 +65,7 @@ class web(object):
         else:
             pass
 
-        #return  json.dumps(response)
+       #return  json.dumps(eval(data)['response'])
     @app.route('/mockstop',methods=["POST"])
     
     def mockstop(self):
