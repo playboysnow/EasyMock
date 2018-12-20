@@ -16,16 +16,15 @@ sys.setdefaultencoding('UTF-8')
 class web(object):
    
     def __init__(self):
-        self.res_succ={"code":0,"message":"server start succ"}
-        self.res_fail={"code":1,"message":"server start fail"}
-        #sys_type=platform.architecture()[1]
-        self.sys_type=platform.system()   #"Windows,Linux"
+        #self.sys_type=platform.system()   #"Windows,Linux"
         pass
     
     global req
     req={"url":"/123","response":{"code ":"ok "},"type":1,"method":["POST"],"sleeptime":0,"host":"0.0.0.0","port":5001}
-    global file 
-    file='runserver.py'
+    global type_1_file 
+    type_1_file='runserver.py'
+    global type_2_file 
+    type_2_file='simpleserver.py'
     global port
     port=8080
     global host
@@ -54,11 +53,14 @@ class web(object):
         if mock_type==1:
             #调用shell 执行常规方式
             #return json.dumps(eval(data)['response'])  启动后 如何响应状态
-            surgery().system(file,eval(data))
+            print "start"
+            surgery().system(type_1_file,eval(data))
             return  json.dumps(eval(data)['response'])
             
         elif mock_type==2:
             #调用
+            surgery().system(type_2_file,eval(data))
+            return  json.dumps(eval(data)['response'])
             pass
         elif mock_type==3:
             pass
@@ -68,40 +70,30 @@ class web(object):
        #return  json.dumps(eval(data)['response'])
     @app.route('/mockstop',methods=["POST"])
     
-    def mockstop(self):
+    def mockstop():
         data=request.get_data()
-        js_data=json.loads(data)
-        mock_type=js_data('type')
+        mock_type=eval(data)['type']
         #根据不同类型执行不同类型文件
         if mock_type==1:
             #调用shell 执行常规方式
-            web().system(self,file,js_data)
+            surgery().clear(type_1_file,eval(data)['port'])
+            return  json.dumps(eval(data)['response'])
             pass
         elif mock_type==2:
             #调用
+            surgery().clear(type_2_file,eval(data)['port'])
+            return  json.dumps(eval(data)['response'])
             pass
         elif mock_type==3:
             pass
         else:
             pass
 
-        return  json.dumps(response)
+        #return  json.dumps(response)
     def run(self,debug=False):
         app.run(host=host,port=port,debug=debug)
         pass
     
-    #global system
-    def system(self,file,req):
-        if self.sys_type=="Windows":
-            print 'python2 %s  %s ' % (file, req)
-
-            if os.system('python2  %s  "'"%s"'" ' % (file , req)) ==0:
-                #print self.res_fail
-                return self.res_succ
-        elif self.sys_type=="Linux":
-            if os.system('python (%s  "'"%s"'" )' % (file, req)) ==0:
-                return self.res_succ
-
 
     
 if __name__=='__main__':
