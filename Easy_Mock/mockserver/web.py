@@ -11,7 +11,22 @@ from surgery import surgery
 reload(sys)
 sys.setdefaultencoding('UTF-8')
 #sys.setdefaultencoding('gb2312')
+"""
+支持https、其他协议
 
+支持添加逻辑判断——把控安全风险
+
+根据不同端口启动，且可以启动N多个API
+
+单独打包支持 即时启动即刻使用
+
+前端界面
+
+服务部署的话，支持mongodb json格式存储，且之前短信验证码登陆验证
+
+远程机器调用，即host不再是0.0.0.0    先调研  不支持
+
+"""
 
 class web(object):
    
