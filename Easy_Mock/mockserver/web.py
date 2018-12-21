@@ -8,10 +8,15 @@ import json,yaml
 import time
 import platform
 from surgery import surgery
+
 reload(sys)
 sys.setdefaultencoding('UTF-8')
 #sys.setdefaultencoding('gb2312')
 """
+参数解析，比如-h  -f 
+
+支持json文件读取，根据固定格式py 自由添加逻辑判断
+
 支持https、其他协议
 
 支持添加逻辑判断——把控安全风险
@@ -20,7 +25,7 @@ sys.setdefaultencoding('UTF-8')
 
 单独打包支持 即时启动即刻使用
 
-前端界面
+前端界面、支持登陆 短信验证码
 
 服务部署的话，支持mongodb json格式存储，且之前短信验证码登陆验证
 
@@ -70,6 +75,7 @@ class web(object):
             #return json.dumps(eval(data)['response'])  启动后 如何响应状态
             print "start"
             surgery().system(type_1_file,eval(data))
+            #server.play(eval(data))
             return  json.dumps(eval(data)['response'])
             
         elif mock_type==2:
@@ -109,7 +115,7 @@ class web(object):
         app.run(host=host,port=port,debug=debug)
         pass
     
-
+    
     
 if __name__=='__main__':
     #web().system(file,req)
