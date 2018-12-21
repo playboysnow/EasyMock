@@ -52,8 +52,10 @@ class runserver(object):
         time.sleep(sleeptime/1000)
         return  json.dumps(response)
     def run(self,debug=False):
-        app.run(host=host,port=port,debug=debug)
-        pass
+        try:
+            app.run(host=host,port=port,debug=debug)
+        except:
+            print "启动失败，检查端口是否被占用"
 
 
 if __name__=='__main__':

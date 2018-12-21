@@ -50,6 +50,13 @@ class surgery(object):
             else:
                 return self.res_fail
 
+    def json_to_dict(self,data):
+        if type(data)!=str:
+
+            return eval(str(data))
+        else:
+            return eval(data)
+        pass
 
 
 

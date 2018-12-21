@@ -8,9 +8,10 @@ import json,yaml
 import time
 import platform
 from surgery import surgery
-
+#import server
 reload(sys)
 sys.setdefaultencoding('UTF-8')
+surgery=surgery()
 #sys.setdefaultencoding('gb2312')
 """
 参数解析，比如-h  -f 
@@ -37,6 +38,7 @@ class web(object):
    
     def __init__(self):
         #self.sys_type=platform.system()   #"Windows,Linux"
+        #self.a="a"
         pass
     
     global req
@@ -63,6 +65,7 @@ class web(object):
     @app.route('/mockstart',methods=["POST"])
     
     def mockstart():
+        #print self.a
         data=request.get_data()
         #print data,eval(data)
         #js_data=json.loads(data)
@@ -74,13 +77,14 @@ class web(object):
             #调用shell 执行常规方式
             #return json.dumps(eval(data)['response'])  启动后 如何响应状态
             print "start"
-            surgery().system(type_1_file,eval(data))
+            surgery.system(type_1_file,eval(data))
+            print surgery.json_to_dict(data)
             #server.play(eval(data))
             return  json.dumps(eval(data)['response'])
             
         elif mock_type==2:
             #调用
-            surgery().system(type_2_file,eval(data))
+            surgery.system(type_2_file,eval(data))
             return  json.dumps(eval(data)['response'])
             pass
         elif mock_type==3:
@@ -97,12 +101,13 @@ class web(object):
         #根据不同类型执行不同类型文件
         if mock_type==1:
             #调用shell 执行常规方式
-            surgery().clear(type_1_file,eval(data)['port'])
+            surgery.clear(type_1_file,eval(data)['port'])
+            surgery.json_to_dict(data)
             return  json.dumps(eval(data)['response'])
             pass
         elif mock_type==2:
             #调用
-            surgery().clear(type_2_file,eval(data)['port'])
+            surgery.clear(type_2_file,eval(data)['port'])
             return  json.dumps(eval(data)['response'])
             pass
         elif mock_type==3:
@@ -111,6 +116,14 @@ class web(object):
             pass
 
         #return  json.dumps(response)
+    @app.route('/sendsms',methods=['POST'])
+    def send_sms():
+        """发送验证码"""
+        pass
+    @app.route('/login',methods=['POST'])
+    def login():
+        """验证登陆逻辑"""
+        pass
     def run(self,debug=False):
         app.run(host=host,port=port,debug=debug)
         pass

@@ -8,16 +8,22 @@ import json
 reload(sys)
 sys.setdefaultencoding('UTF-8')
 #sys.setdefaultencoding('gb2312')
-
-
-def play(req):
+class play(object):
+    '''data=eval(str(req))
+    gl_data=data
+    host=data['host']
+        
+    port=data['port']
+    run(host,port)'''
+    def __init__(self,req):
         data=eval(str(req))
+        global gl_data
         gl_data=data
         host=data['host']
         
         port=data['port']
         run(host,port)
-       
+        pass 
     
     
 app=Flask(__name__)
