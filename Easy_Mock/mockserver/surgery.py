@@ -1,10 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os,sys
+import os,sys,random
 import logging
 import json,yaml
 import platform
+from qcloudsms_py import SmsSingleSender
+from qcloudsms_py import SmsMobileStatusPuller
+from qcloudsms_py.httpclient import HTTPError
 reload(sys)
 sys.setdefaultencoding('UTF-8')
 #sys.setdefaultencoding('gb2312')
@@ -57,9 +60,48 @@ class surgery(object):
         else:
             return eval(data)
         pass
+    def send(self,data):
+        """
+        data={
+            phonehum:123,
 
+        }
+        """
+        sms_type = 0
+         # appid="140016XXXXX"
+        appid="	1400162404"
+        #appkey="9993bac2a2b15aXXX"
+        appkey="9993bac2a2b15a202bd718ea"
+        template_id=""
+        sms_code=self.get_random_code
+        ssender = SmsSingleSender(appid, appkey)
+        try:
+        #print data['remobile'],data['text']
+            result = ssender.send_with_param(86, data["phonenum"],
+            template_id,[sms_code,'5'], extend="", ext="")
+            if result['code']==0:
+                print sms_code
+        except HTTPError as e:
+            print(e)
+        except Exception as e:
+            print(e)
+    def login(self,data):
+        """
+        data={
+            phonenum="123",
+            sms_code=""
 
-
+        }
+        """
+        if data['sms_code']==self.send(data):
+            return  True
+            pass
+    def get_random_code(self):
+        random_code=""
+        for i in range (0,6):
+            num=random.randint(0,9)
+            random_code="%s%s" % (random_code,num)
+        return random_code
 
 
 
