@@ -8,12 +8,37 @@ import json,yaml
 import time
 import platform
 from surgery import surgery
+#from runserver import runserver
 #import server
 reload(sys)
 sys.setdefaultencoding('UTF-8')
 surgery=surgery()
 #sys.setdefaultencoding('gb2312')
 """
+可以使用闭包解决 python 文件的形式：
+比如
+b.py:
+from flask import Flask,render_template,request,redirect
+def run_server(data):
+        url=data['url']
+        port=data['port']
+        app=Flask(__name__)
+        @app.route(url,methods=['POST'])
+        def index():
+                print "bb"
+        def run():
+                app.run(host="0.0.0.0",port=port,debug=False)
+        run()
+
+a.py:
+from flask import Flask,render_template,request,redirect
+import b
+data={
+        "url":"/123",
+        "port":8080
+        }
+b.run_server(data)
+
 参数解析，比如-h  -f 
 
 支持json文件读取，根据固定格式py 自由添加逻辑判断
@@ -77,8 +102,9 @@ class web(object):
             #调用shell 执行常规方式
             #return json.dumps(eval(data)['response'])  启动后 如何响应状态
             print "start"
-            surgery.system(type_1_file,eval(data))
-            print surgery.json_to_dict(data)
+            #surgery.system(type_1_file,eval(data))
+            surgery.type_1_server(data)
+            #print surgery.json_to_dict(data)
             #server.play(eval(data))
             return  json.dumps(eval(data)['response'])
             
@@ -133,6 +159,9 @@ class web(object):
 if __name__=='__main__':
     #web().system(file,req)
     web().run()
+    #runserver().run()
+    
+    
     
 
 

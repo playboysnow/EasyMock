@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os,sys,random
+from flask import Flask,render_template,request,redirect
+import os,sys,random,time
 import logging
 import json,yaml
 import platform
@@ -103,6 +104,32 @@ class surgery(object):
             random_code="%s%s" % (random_code,num)
         return random_code
 
+    def type_1_server(self,data):
+        s_data=self.json_to_dict(data)
+        url=s_data['url']
+        
+        response=s_data['response']
+        
+        method=s_data['method']
+        
+        sleeptime=s_data['sleeptime']
+        
+        host=s_data['host']
+        
+        port=s_data['port']
+        app=Flask(__name__)
+        @app.route(url+'/<args>',methods=method)
+    
+        def index(args):
+            time.sleep(sleeptime/1000)
+            return  json.dumps(response)
+        def run(debug=False):
+            try:
+                app.run(host=host,port=port,debug=debug)
+            except:
+                print "启动失败，检查端口是否被占用"
+        run()
+        pass
 
 
 
