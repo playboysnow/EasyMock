@@ -110,7 +110,8 @@ class web(object):
             
         elif mock_type==2:
             #调用
-            surgery.system(type_2_file,eval(data))
+            #surgery.system(type_2_file,eval(data))
+            surgery.type_2_server(data)
             return  json.dumps(eval(data)['response'])
             pass
         elif mock_type==3:
@@ -127,13 +128,13 @@ class web(object):
         #根据不同类型执行不同类型文件
         if mock_type==1:
             #调用shell 执行常规方式
-            surgery.clear(type_1_file,eval(data)['port'])
-            surgery.json_to_dict(data)
+            surgery.clear(eval(data)['port'])
+            #surgery.json_to_dict(data)
             return  json.dumps(eval(data)['response'])
             pass
         elif mock_type==2:
             #调用
-            surgery.clear(type_2_file,eval(data)['port'])
+            surgery.clear(eval(data)['port'])
             return  json.dumps(eval(data)['response'])
             pass
         elif mock_type==3:
@@ -145,6 +146,8 @@ class web(object):
     @app.route('/sendsms',methods=['POST'])
     def send_sms():
         """发送验证码"""
+        data=request.get_data()
+        surgery.send(data)
         pass
     @app.route('/login',methods=['POST'])
     def login():

@@ -36,7 +36,7 @@ class surgery(object):
             code=os.system('python %s  "'"%s"'"   &' % (file, req))
             if code==0:
                 return self.res_succ
-    def clear(self,file,port):
+    def clear(self,port):
         if self.sys_type=="Windows":
             #print 'taskkill /im   python2.exe   /t  /f ' 
             #code=os.system('taskkill /im   python2.exe   /t  /f  ' )
@@ -48,7 +48,8 @@ class surgery(object):
             if code==0:
                     return self.res_succ
         elif self.sys_type=="Linux":
-            code=os.system("ps aux |grep -v grep |grep %s |awk -F' ' '{print $2}'|xargs kill -9   &" ) % file
+            #code=os.system("ps aux |grep -v grep |grep %s |awk -F' ' '{print $2}'|xargs kill -9   &" ) % file
+            code=os.system("netstat -nlp|grep %s |awk {'print $7'}|awk -F'/' '{print $1}'|xargs kill -9   &" ) % port
             if code==0:
                 return self.res_succ
             else:
@@ -118,6 +119,32 @@ class surgery(object):
         
         port=s_data['port']
         app=Flask(__name__)
+        @app.route(url,methods=method)
+    
+        def index():
+            time.sleep(sleeptime/1000)
+            return  json.dumps(response)
+        def run(debug=False):
+            try:
+                app.run(host=host,port=port,debug=debug)
+            except:
+                print "启动失败，检查端口是否被占用"
+        run()
+        pass
+    def type_2_server(self,data):
+        s_data=self.json_to_dict(data)
+        url=s_data['url']
+        
+        response=s_data['response']
+        
+        method=s_data['method']
+        
+        sleeptime=s_data['sleeptime']
+        
+        host=s_data['host']
+        
+        port=s_data['port']
+        app=Flask(__name__)
         @app.route(url+'/<args>',methods=method)
     
         def index(args):
@@ -129,7 +156,6 @@ class surgery(object):
             except:
                 print "启动失败，检查端口是否被占用"
         run()
-        pass
 
 
 
