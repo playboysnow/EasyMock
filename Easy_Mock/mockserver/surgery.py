@@ -144,6 +144,23 @@ class surgery(object):
         host=s_data['host']
         
         port=s_data['port']
+        print url[0]
+        for i in range(0,len(url)):
+            print url[i]
+            app=Flask(__name__)
+            @app.route(url[i]+'/<args>',methods=method)
+    
+            def index(args):
+                time.sleep(sleeptime/1000)
+                return  json.dumps(response)
+            def run(debug=False):
+                try:
+                    app.run(host=host,port=port,debug=debug)
+                except:
+                    print "启动失败，检查端口是否被占用"
+            run()
+
+        '''
         app=Flask(__name__)
         @app.route(url+'/<args>',methods=method)
     
@@ -156,7 +173,7 @@ class surgery(object):
             except:
                 print "启动失败，检查端口是否被占用"
         run()
-
+        '''
 
 
 

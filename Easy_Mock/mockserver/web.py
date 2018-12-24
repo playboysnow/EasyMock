@@ -15,7 +15,7 @@ sys.setdefaultencoding('UTF-8')
 surgery=surgery()
 #sys.setdefaultencoding('gb2312')
 """
-可以使用闭包解决 python 文件的形式：
+1、可以使用闭包解决 python 文件的形式：   done
 比如
 b.py:
 from flask import Flask,render_template,request,redirect
@@ -47,11 +47,11 @@ b.run_server(data)
 
 支持添加逻辑判断——把控安全风险
 
-根据不同端口启动，且可以启动N多个API
+根据不同端口启动，且可以启动N多个API；相同端口下启动多个URL
 
-单独打包支持 即时启动即刻使用
+单独打包支持 即时启动即刻使用       Linux低内核可能coredump
 
-前端界面、支持登陆 短信验证码
+前端界面、支持登陆 短信验证码       
 
 服务部署的话，支持mongodb json格式存储，且之前短信验证码登陆验证
 
