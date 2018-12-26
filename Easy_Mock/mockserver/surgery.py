@@ -93,7 +93,7 @@ class surgery(object):
             result = ssender.send_with_param(86, data["phonenum"],
             template_id,[sms_code,'1'], extend="", ext="")
             if result['code']==0:
-                print sms_code
+                print sms_code,sms_num
                 return True
         except HTTPError as e:
             print(e)

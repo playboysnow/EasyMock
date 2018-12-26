@@ -65,40 +65,59 @@ class web(object):
     def __init__(self):
         #self.sys_type=platform.system()   #"Windows,Linux"
         #self.a="a"
-        opts, args = getopt.getopt(sys.argv[1:], "hf:v")
-        for op,value in opts:
-            if op == "-h":
-                self.usage()
-                sys.exit()
-            elif op == "-f":
-                surgery.start(value)
-            elif op == "-v":
-                print "version 1.1.0"
+        try:
+            opts, args = getopt.getopt(sys.argv[1:], "hf:vw")
+        except:
+            self.usage()
+        try:
+            for op,value in opts:
+                if op == "-h":
+                    self.usage()
+                    sys.exit()
+                elif op == "-f":
+                    surgery.start(value)
+                elif op == "-v":
+                    print "version 1.1.0"
+                else: 
+                    pass
+        except:
+            pass
+        try:
+            if "-w" in sys.argv[1:]:
+                run()
+            else:
+                #self.usage()
+                pass
+        except:
+            run()
+        else:pass
         pass
     
     def usage(self):
         print """
-        usage: [-h] [-f] [-v]
+usage: [-h] [-f] [-v]
+        
         -h     help information
         -f     file (json)
         -v     version
+        -w     start webui at 127.0.0.1:8080
 
-        eg:
+eg:
         ./bin  -f type1.json 
         ./bin  -h
         ./bin  -v
+        ./bin
+        ./bin  -w 
         """
         pass
     global req
     req={"url":"/123","response":{"code ":"ok "},"type":1,"method":["POST"],"sleeptime":0,"host":"0.0.0.0","port":5001}
-    global type_1_file 
-    type_1_file='runserver.py'
-    global type_2_file 
-    type_2_file='simpleserver.py'
+   
     global port
     port=8080
     global host
     host='0.0.0.0'
+    global run
     global app
     app=Flask(__name__)
 
@@ -187,7 +206,8 @@ class web(object):
         data=request.get_data()
         surgery.login(data)
         pass
-    def run(self,debug=False):
+    
+    def run(debug=False):
         app.run(host=host,port=port,debug=debug)
         pass
     
