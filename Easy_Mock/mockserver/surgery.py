@@ -229,7 +229,7 @@ class surgery(object):
                 return json.dumps(response_fail)
         def run(debug=False):
             try:
-                app.run(host=self.host,port=port,debug=debug)
+                app.run(host=self.host,port=port,debug=debug,threaded=True)
             except:
                 print "启动失败，检查端口是否被占用"
         run()
