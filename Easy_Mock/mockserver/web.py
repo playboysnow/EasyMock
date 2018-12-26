@@ -65,6 +65,16 @@ class web(object):
     def __init__(self):
         #self.sys_type=platform.system()   #"Windows,Linux"
         #self.a="a"
+        '''
+        try:
+            if "-w" in sys.argv[1:]:
+                run()
+            else:
+                #self.usage()
+                pass
+        except:
+            run()
+        '''
         try:
             opts, args = getopt.getopt(sys.argv[1:], "hf:vw")
         except:
@@ -83,15 +93,15 @@ class web(object):
         except:
             pass
         try:
-            if "-w" in sys.argv[1:]:
+            if not sys.argv[1:]:
                 run()
+                pass
             else:
                 #self.usage()
                 pass
         except:
             run()
-        else:pass
-        pass
+        #pass
     
     def usage(self):
         print """
@@ -100,14 +110,13 @@ usage: [-h] [-f] [-v]
         -h     help information
         -f     file (json)
         -v     version
-        -w     start webui at 127.0.0.1:8080
+       
 
 eg:
         ./bin  -f type1.json 
         ./bin  -h
         ./bin  -v
-        ./bin
-        ./bin  -w 
+        ./bin  start webui at 127.0.0.1:8080
         """
         pass
     global req

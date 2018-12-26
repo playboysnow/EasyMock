@@ -26,6 +26,7 @@ class surgery(object):
     def __init__(self):
         self.res_succ={"code":0,"message":"server start succ"}
         self.res_fail={"code":1,"message":"server start fail"}
+        self.host="0.0.0.0"
         #sys_type=platform.architecture()[1]
         self.sys_type=platform.system()   #"Windows,Linux"
         #self.code=[]
@@ -137,7 +138,7 @@ class surgery(object):
         
         sleeptime=s_data['sleeptime']
         
-        host=s_data['host']
+        #host=s_data['host']
         
         port=s_data['port']
         app=Flask(__name__)
@@ -148,7 +149,7 @@ class surgery(object):
             return  json.dumps(response)
         def run(debug=False):
             try:
-                app.run(host=host,port=port,debug=debug)
+                app.run(host=self.host,port=port,debug=debug)
             except:
                 print "启动失败，检查端口是否被占用"
         run()
@@ -163,7 +164,7 @@ class surgery(object):
         
         sleeptime=s_data['sleeptime']
         
-        host=s_data['host']
+        #host=s_data['host']
         
         port=s_data['port']
         
@@ -175,7 +176,7 @@ class surgery(object):
             return  json.dumps(response)
         def run(debug=False):
             try:
-                app.run(host=host,port=port,debug=debug)
+                app.run(host=self.host,port=port,debug=debug)
             except:
                 print "启动失败，检查端口是否被占用"
         run()
@@ -209,7 +210,7 @@ class surgery(object):
         
         sleeptime=s_data['sleeptime']
         
-        host=s_data['host']
+        #host=s_data['host']
         
         port=s_data['port']
         
@@ -228,7 +229,7 @@ class surgery(object):
                 return json.dumps(response_fail)
         def run(debug=False):
             try:
-                app.run(host=host,port=port,debug=debug)
+                app.run(host=self.host,port=port,debug=debug)
             except:
                 print "启动失败，检查端口是否被占用"
         run()
@@ -248,7 +249,7 @@ class surgery(object):
         
         sleeptime=s_data['sleeptime']
         
-        host=s_data['host']
+        #host=s_data['host']
         
         port=s_data['port']
         
@@ -267,7 +268,7 @@ class surgery(object):
                 return json.dumps(response_fail)
         def run(debug=False):
             try:
-                app.run(host=host,port=port,debug=debug)
+                app.run(host=self.host,port=port,debug=debug)
             except:
                 print "启动失败，检查端口是否被占用"
         run()
