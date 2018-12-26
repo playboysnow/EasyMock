@@ -210,9 +210,9 @@ class surgery(object):
         def index(args):
             time.sleep(sleeptime/1000)
             data=request.get_data()
-            j_data=eval(data)
-            print j_data,type(j_data)
-            print data ,type(data)
+            #j_data=eval(data)
+            #print j_data,type(j_data)
+            #print data ,type(data)
             if  check().docheck(data):
                 return  json.dumps(response_succ)
             else:
@@ -224,7 +224,44 @@ class surgery(object):
                 print "启动失败，检查端口是否被占用"
         run()
 
+    def type_4_server(self,data):
+        """
+        新增逻辑判断
+        """
+        s_data=self.json_to_dict(data)
+        url=s_data['url']
+        
+        response_succ=s_data['response_succ']
 
+        response_fail=s_data['response_fail']
+        
+        method=s_data['method']
+        
+        sleeptime=s_data['sleeptime']
+        
+        host=s_data['host']
+        
+        port=s_data['port']
+        
+        app=Flask(__name__)
+        @app.route(url,methods=method)
+    
+        def index():
+            time.sleep(sleeptime/1000)
+            data=request.get_data()
+            #j_data=eval(data)
+            #print j_data,type(j_data)
+            #print data ,type(data)
+            if  check().docheck(data):
+                return  json.dumps(response_succ)
+            else:
+                return json.dumps(response_fail)
+        def run(debug=False):
+            try:
+                app.run(host=host,port=port,debug=debug)
+            except:
+                print "启动失败，检查端口是否被占用"
+        run()
 
 
     

@@ -128,7 +128,9 @@ class web(object):
             surgery.type_3_server(data)
             return  json.dumps(eval(data)['response_succ'])
             pass
-        else:
+        elif mock_type==4:
+            surgery.type_4_server(data)
+            return  json.dumps(eval(data)['response_succ'])
             pass
 
        #return  json.dumps(eval(data)['response'])
@@ -137,7 +139,9 @@ class web(object):
     def mockstop():
         data=request.get_data()
         mock_type=eval(data)['type']
-        #根据不同类型执行不同类型文件
+        surgery.clear(eval(data)['port'])
+        return json.dumps(eval(data)['response'])
+        '''#根据不同类型执行不同类型文件
         if mock_type==1:
             #调用shell 执行常规方式
             surgery.clear(eval(data)['port'])
@@ -150,10 +154,12 @@ class web(object):
             return  json.dumps(eval(data)['response'])
             pass
         elif mock_type==3:
+            surgery.clear(eval(data)['port'])
+            return  json.dumps(eval(data)['response'])
             pass
         else:
             pass
-
+        '''
         #return  json.dumps(response)
     @app.route('/sendsms',methods=['POST'])
     def send_sms():
