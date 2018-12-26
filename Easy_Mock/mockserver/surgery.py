@@ -9,6 +9,11 @@ import platform
 from qcloudsms_py import SmsSingleSender
 from qcloudsms_py import SmsMobileStatusPuller
 from qcloudsms_py.httpclient import HTTPError
+
+try:
+    from server import check
+except:
+    pass
 reload(sys)
 sys.setdefaultencoding('UTF-8')
 #sys.setdefaultencoding('gb2312')
@@ -105,6 +110,14 @@ class surgery(object):
             random_code="%s%s" % (random_code,num)
         return random_code
 
+    def read_file(self,file):
+        fd=open(file,'r',encoding='utf-8').readlines()
+        #with open(file,'r',encoding='utf-8') as f:
+        return fd    
+        pass
+
+
+
     def type_1_server(self,data):
         s_data=self.json_to_dict(data)
         url=s_data['url']
@@ -144,21 +157,19 @@ class surgery(object):
         host=s_data['host']
         
         port=s_data['port']
-        print url[0]
-        for i in range(0,len(url)):
-            print url[i]
-            app=Flask(__name__)
-            @app.route(url[i]+'/<args>',methods=method)
+        
+        app=Flask(__name__)
+        @app.route(url+'/<args>',methods=method)
     
-            def index(args):
-                time.sleep(sleeptime/1000)
-                return  json.dumps(response)
-            def run(debug=False):
-                try:
-                    app.run(host=host,port=port,debug=debug)
-                except:
-                    print "启动失败，检查端口是否被占用"
-            run()
+        def index(args):
+            time.sleep(sleeptime/1000)
+            return  json.dumps(response)
+        def run(debug=False):
+            try:
+                app.run(host=host,port=port,debug=debug)
+            except:
+                print "启动失败，检查端口是否被占用"
+        run()
 
         '''
         app=Flask(__name__)
@@ -174,7 +185,44 @@ class surgery(object):
                 print "启动失败，检查端口是否被占用"
         run()
         '''
+    def type_3_server(self,data):
+        """
+        新增逻辑判断
+        """
+        s_data=self.json_to_dict(data)
+        url=s_data['url']
+        
+        response_succ=s_data['response_succ']
 
+        response_fail=s_data['response_fail']
+        
+        method=s_data['method']
+        
+        sleeptime=s_data['sleeptime']
+        
+        host=s_data['host']
+        
+        port=s_data['port']
+        
+        app=Flask(__name__)
+        @app.route(url+'/<args>',methods=method)
+    
+        def index(args):
+            time.sleep(sleeptime/1000)
+            data=request.get_data()
+            j_data=eval(data)
+            print j_data,type(j_data)
+            print data ,type(data)
+            if  check().docheck(data):
+                return  json.dumps(response_succ)
+            else:
+                return json.dumps(response_fail)
+        def run(debug=False):
+            try:
+                app.run(host=host,port=port,debug=debug)
+            except:
+                print "启动失败，检查端口是否被占用"
+        run()
 
 
 

@@ -8,30 +8,25 @@ import json
 reload(sys)
 sys.setdefaultencoding('UTF-8')
 #sys.setdefaultencoding('gb2312')
-class play(object):
-    '''data=eval(str(req))
-    gl_data=data
-    host=data['host']
+class check(object):
+    
+    def __init__(self):
         
-    port=data['port']
-    run(host,port)'''
-    def __init__(self,req):
-        data=eval(str(req))
-        global gl_data
-        gl_data=data
-        host=data['host']
-        
-        port=data['port']
-        run(host,port)
-        pass 
-    
-    
-app=Flask(__name__)
-@app.route(gl_data['url'],methods=gl_data['method'])  
-def index():
-        sleep(gl_data['sleeptime']/1000)
-        return  json.dumps(gl_data['response'])
-    
-def run(host,port,debug=False):
-        app.run(host=host,port=port,debug=debug)
         pass
+
+    def docheck(self,req):
+        #print req
+        data=eval(req)
+        #print data    
+        if data["code"]==1:
+                """
+                返回response_succ
+                """
+                return True
+        else:
+                """
+                返回response_fail
+                """
+                return False      
+    
+    

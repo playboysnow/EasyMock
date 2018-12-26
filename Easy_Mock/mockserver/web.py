@@ -3,6 +3,7 @@
 
 from flask import Flask,render_template,request,redirect
 import urllib,requests,os,sys
+import argparse
 import logging
 import json,yaml
 import time
@@ -64,8 +65,17 @@ class web(object):
     def __init__(self):
         #self.sys_type=platform.system()   #"Windows,Linux"
         #self.a="a"
+        self.usage()
         pass
     
+    def usage(self):
+        parser = argparse.ArgumentParser(description='easymock server.')
+        parser.add_argument('integers', metavar='N', type=int, nargs='+',
+                    help='an integer for the accumulator')
+        parser.add_argument('--sum', dest='accumulate', action='store_const',
+                    const=sum, default=max,
+                    help='sum the integers (default: find the max)')
+        pass
     global req
     req={"url":"/123","response":{"code ":"ok "},"type":1,"method":["POST"],"sleeptime":0,"host":"0.0.0.0","port":5001}
     global type_1_file 
@@ -115,6 +125,8 @@ class web(object):
             return  json.dumps(eval(data)['response'])
             pass
         elif mock_type==3:
+            surgery.type_3_server(data)
+            return  json.dumps(eval(data)['response_succ'])
             pass
         else:
             pass
