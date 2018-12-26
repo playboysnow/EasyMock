@@ -3,6 +3,7 @@
 
 from flask import Flask,render_template,request,redirect
 import os,sys,random,time
+import io
 import logging
 import json,yaml
 import platform
@@ -20,13 +21,14 @@ sys.setdefaultencoding('UTF-8')
 
 
 class surgery(object):
-   
+    global sms_num
+    sms_num=[]
     def __init__(self):
         self.res_succ={"code":0,"message":"server start succ"}
         self.res_fail={"code":1,"message":"server start fail"}
         #sys_type=platform.architecture()[1]
         self.sys_type=platform.system()   #"Windows,Linux"
- 
+        #self.code=[]
     def system(self,file,req):
         if self.sys_type=="Windows":
             print 'python2 %s  %s ' % (file, req)
@@ -67,6 +69,9 @@ class surgery(object):
         else:
             return eval(data)
         pass
+    def cron(self):
+        time.sleep(60)
+        sms_num.pop()
     def send(self,data):
         """
         data={
@@ -81,13 +86,15 @@ class surgery(object):
         appkey="9993bac2a2b15a202bd718ea"
         template_id=""
         sms_code=self.get_random_code
+        sms_num.append(sms_code)
         ssender = SmsSingleSender(appid, appkey)
         try:
         #print data['remobile'],data['text']
             result = ssender.send_with_param(86, data["phonenum"],
-            template_id,[sms_code,'5'], extend="", ext="")
+            template_id,[sms_code,'1'], extend="", ext="")
             if result['code']==0:
                 print sms_code
+                return True
         except HTTPError as e:
             print(e)
         except Exception as e:
@@ -100,7 +107,9 @@ class surgery(object):
 
         }
         """
-        if data['sms_code']==self.send(data):
+        data=self.json_to_dict(data)
+        if data['sms_code']  in sms_num:
+            sms_num.pop()#清理
             return  True
             pass
     def get_random_code(self):
@@ -111,7 +120,7 @@ class surgery(object):
         return random_code
 
     def read_file(self,file):
-        fd=open(file,'r',encoding='utf-8').readlines()
+        fd=io.open(file,'r',encoding='utf-8').readlines()
         #with open(file,'r',encoding='utf-8') as f:
         return fd    
         pass
@@ -252,7 +261,7 @@ class surgery(object):
             #j_data=eval(data)
             #print j_data,type(j_data)
             #print data ,type(data)
-            if  check().docheck(data):
+            if  check.docheck(data):
                 return  json.dumps(response_succ)
             else:
                 return json.dumps(response_fail)
@@ -263,5 +272,31 @@ class surgery(object):
                 print "启动失败，检查端口是否被占用"
         run()
 
-
+    def start(self,data):
+        
+        data=self.read_file(data)
+        print data
+        j_data=eval(json.dumps(data))[0]
+        print type(eval(j_data))
+        mock_type=eval(j_data)['type']
+        #根据不同类型执行不同类型文件
+        if mock_type==1:
+            self.type_1_server(j_data)
+           
+            return  json.dumps(eval(data)['response'])
+            
+        elif mock_type==2:
+            #调用
+            #surgery.system(type_2_file,eval(data))
+            self.type_2_server(j_data)
+            return  json.dumps(eval(data)['response'])
+            pass
+        elif mock_type==3:
+            self.type_3_server(j_data)
+            return  json.dumps(eval(data)['response_succ'])
+            pass
+        elif mock_type==4:
+            self.type_4_server(j_data)
+            return  json.dumps(eval(data)['response_succ'])
+            pass
     

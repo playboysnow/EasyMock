@@ -3,7 +3,7 @@
 
 from flask import Flask,render_template,request,redirect
 import urllib,requests,os,sys
-import argparse
+import argparse,getopt
 import logging
 import json,yaml
 import time
@@ -50,7 +50,7 @@ b.run_server(data)
 
 根据不同端口启动，且可以启动N多个API；相同端口下启动多个URL
 
-单独打包支持 即时启动即刻使用       Linux低内核可能coredump
+单独打包支持 即时启动即刻使用       Linux低内核可能coredump,6.4以上
 
 前端界面、支持登陆 短信验证码       
 
@@ -65,16 +65,29 @@ class web(object):
     def __init__(self):
         #self.sys_type=platform.system()   #"Windows,Linux"
         #self.a="a"
-        self.usage()
+        opts, args = getopt.getopt(sys.argv[1:], "hf:v")
+        for op,value in opts:
+            if op == "-h":
+                self.usage()
+                sys.exit()
+            elif op == "-f":
+                surgery.start(value)
+            elif op == "-v":
+                print "version 1.1.0"
         pass
     
     def usage(self):
-        parser = argparse.ArgumentParser(description='easymock server.')
-        parser.add_argument('integers', metavar='N', type=int, nargs='+',
-                    help='an integer for the accumulator')
-        parser.add_argument('--sum', dest='accumulate', action='store_const',
-                    const=sum, default=max,
-                    help='sum the integers (default: find the max)')
+        print """
+        usage: [-h] [-f] [-v]
+        -h     help information
+        -f     file (json)
+        -v     version
+
+        eg:
+        ./bin  -f type1.json 
+        ./bin  -h
+        ./bin  -v
+        """
         pass
     global req
     req={"url":"/123","response":{"code ":"ok "},"type":1,"method":["POST"],"sleeptime":0,"host":"0.0.0.0","port":5001}
@@ -166,10 +179,13 @@ class web(object):
         """发送验证码"""
         data=request.get_data()
         surgery.send(data)
+        surgery.cron()
         pass
     @app.route('/login',methods=['POST'])
     def login():
         """验证登陆逻辑"""
+        data=request.get_data()
+        surgery.login(data)
         pass
     def run(self,debug=False):
         app.run(host=host,port=port,debug=debug)
@@ -179,7 +195,8 @@ class web(object):
     
 if __name__=='__main__':
     #web().system(file,req)
-    web().run()
+    web()
+    
     #runserver().run()
     
     
