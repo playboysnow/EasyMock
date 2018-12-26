@@ -4,14 +4,18 @@
 from flask import Flask,render_template,request,redirect
 import urllib,requests,os,sys
 import logging
-import json,yaml
+import json
 import time
 import platform
 from surgery import surgery
+from concurrent.futures import ThreadPoolExecutor
 #from runserver import runserver
 #import server
-reload(sys)
-sys.setdefaultencoding('UTF-8')
+import imp
+import asyncio
+imp.reload(sys)
+#reload(sys)
+#sys.setdefaultencoding('UTF-8')
 surgery=surgery()
 #sys.setdefaultencoding('gb2312')
 """
@@ -47,7 +51,7 @@ b.run_server(data)
 
 支持添加逻辑判断——把控安全风险
 
-根据不同端口启动，且可以启动N多个API；相同端口下启动多个URL
+根据不同端口启动，且可以启动N多个API；相同端口下启动多个URL;  使用多线程方式
 
 单独打包支持 即时启动即刻使用       Linux低内核可能coredump
 
@@ -78,7 +82,8 @@ class web(object):
     host='0.0.0.0'
     global app
     app=Flask(__name__)
-
+    global executor
+    #executor = ThreadPoolExecutor(1)
 
     @app.route('/',methods=["GET,POST"])
 
@@ -101,7 +106,7 @@ class web(object):
         if mock_type==1:
             #调用shell 执行常规方式
             #return json.dumps(eval(data)['response'])  启动后 如何响应状态
-            print "start"
+            print ("start")
             #surgery.system(type_1_file,eval(data))
             surgery.type_1_server(data)
             #print surgery.json_to_dict(data)
@@ -111,6 +116,13 @@ class web(object):
         elif mock_type==2:
             #调用
             #surgery.system(type_2_file,eval(data))
+            #executor.submit(surgery.type_2_server(data))
+            #new_loop = asyncio.new_event_loop()
+            #asyncio.set_event_loop(new_loop)
+            #loop=asyncio.get_event_loop()
+            #asyncio.ensure_future(surgery.type_2_server(data))
+            #loop.run_forever()
+            #loop.stop()
             surgery.type_2_server(data)
             return  json.dumps(eval(data)['response'])
             pass

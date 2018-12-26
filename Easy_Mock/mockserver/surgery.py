@@ -4,13 +4,17 @@
 from flask import Flask,render_template,request,redirect
 import os,sys,random,time
 import logging
-import json,yaml
+import json
 import platform
 from qcloudsms_py import SmsSingleSender
 from qcloudsms_py import SmsMobileStatusPuller
 from qcloudsms_py.httpclient import HTTPError
-reload(sys)
-sys.setdefaultencoding('UTF-8')
+from concurrent.futures import ThreadPoolExecutor
+import imp
+import asyncio
+imp.reload(sys)
+#reload(sys)
+#sys.setdefaultencoding('UTF-8')
 #sys.setdefaultencoding('gb2312')
 
 
@@ -24,7 +28,7 @@ class surgery(object):
  
     def system(self,file,req):
         if self.sys_type=="Windows":
-            print 'python2 %s  %s ' % (file, req)
+            #print 'python2 %s  %s ' % (file, req)
 
             code=os.system('start  /b   python2  %s  "'"%s"'"  ' % (file , req))
                 #print self.res_fail
@@ -40,9 +44,9 @@ class surgery(object):
         if self.sys_type=="Windows":
             #print 'taskkill /im   python2.exe   /t  /f ' 
             #code=os.system('taskkill /im   python2.exe   /t  /f  ' )
-            print "start"
+            print ("start")
             pid=os.popen('start  /b  netstat  -ano |findstr %s ' % port).read()[-7:-1].replace(" ","")
-            print pid
+            #print pid
             code=os.system('start  /b  taskkill /pid  %s /t  /f' % pid)
                 #print self.res_fail
             if code==0:
@@ -56,12 +60,15 @@ class surgery(object):
                 return self.res_fail
 
     def json_to_dict(self,data):
+        return json.loads(data)
+        '''
         if type(data)!=str:
 
             return eval(str(data))
         else:
             return eval(data)
         pass
+        '''
     def send(self,data):
         """
         data={
@@ -82,7 +89,7 @@ class surgery(object):
             result = ssender.send_with_param(86, data["phonenum"],
             template_id,[sms_code,'5'], extend="", ext="")
             if result['code']==0:
-                print sms_code
+                print (sms_code)
         except HTTPError as e:
             print(e)
         except Exception as e:
@@ -104,6 +111,11 @@ class surgery(object):
             num=random.randint(0,9)
             random_code="%s%s" % (random_code,num)
         return random_code
+
+    def read_file(self,file):
+        with open(file,'r',encoding='utf-8') as fd:
+            read_data=fd.readlines()
+            return  read_data
 
     def type_1_server(self,data):
         s_data=self.json_to_dict(data)
@@ -128,11 +140,13 @@ class surgery(object):
             try:
                 app.run(host=host,port=port,debug=debug)
             except:
-                print "启动失败，检查端口是否被占用"
+                print ("启动失败，检查端口是否被占用")
         run()
         pass
+    #@asyncio.coroutine
     def type_2_server(self,data):
         s_data=self.json_to_dict(data)
+        print (s_data,type(s_data))
         url=s_data['url']
         
         response=s_data['response']
@@ -144,21 +158,26 @@ class surgery(object):
         host=s_data['host']
         
         port=s_data['port']
-        print url[0]
+        #executor = ThreadPoolExecutor(1)
+        #print url[0]  调研一个端口支持多URL
+        '''
+        app=Flask(__name__)
         for i in range(0,len(url)):
             print url[i]
-            app=Flask(__name__)
-            @app.route(url[i]+'/<args>',methods=method)
-    
+            #t=url[i]
+            #app=Flask(__name__)
+            @app.route('/'+url[i]+'/<args>',methods=method)
+            
             def index(args):
                 time.sleep(sleeptime/1000)
                 return  json.dumps(response)
-            def run(debug=False):
-                try:
-                    app.run(host=host,port=port,debug=debug)
-                except:
-                    print "启动失败，检查端口是否被占用"
-            run()
+        def run(debug=False):
+            try:
+                app.run(host=host,port=port,debug=debug)
+            except:
+                print "启动失败，检查端口是否被占用"
+        run()
+        return True
 
         '''
         app=Flask(__name__)
@@ -167,13 +186,21 @@ class surgery(object):
         def index(args):
             time.sleep(sleeptime/1000)
             return  json.dumps(response)
+        #@asyncio.coroutine
         def run(debug=False):
             try:
                 app.run(host=host,port=port,debug=debug)
             except:
-                print "启动失败，检查端口是否被占用"
+                print ("启动失败，检查端口是否被占用")
+        #new_loop = asyncio.new_event_loop()
+        #asyncio.set_event_loop(new_loop)
+        #loop=asyncio.get_event_loop()
+        #asyncio.ensure_future(run())
+        #loop.run_forever()
+        #loop.stop()
         run()
-        '''
+        #executor.submit(run())
+        
 
 
 
