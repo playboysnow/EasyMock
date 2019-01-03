@@ -123,7 +123,7 @@ eg:
     req={"url":"/123","response":{"code ":"ok "},"type":1,"method":["POST"],"sleeptime":0,"host":"0.0.0.0","port":5001}
    
     global port
-    port=8080
+    port=8000
     global host
     host='0.0.0.0'
     global run
@@ -149,7 +149,7 @@ eg:
         #print js_data
         mock_type=eval(data)['type']
         #根据不同类型执行不同类型文件
-        if mock_type==1:
+        if mock_type==1 or mock_type=="1":
             #调用shell 执行常规方式
             #return json.dumps(eval(data)['response'])  启动后 如何响应状态
             print "start"
@@ -157,28 +157,30 @@ eg:
             surgery.type_1_server(data)
             #print surgery.json_to_dict(data)
             #server.play(eval(data))
-            return  json.dumps(eval(data)['response'])
+            return '{"code":0}'
+            #return  json.dumps(eval(data)['response'])
             
-        elif mock_type==2:
+        elif mock_type==2 or mock_type=="2":
             #调用
             #surgery.system(type_2_file,eval(data))
             surgery.type_2_server(data)
             return  json.dumps(eval(data)['response'])
             pass
-        elif mock_type==3:
+        elif mock_type==3 or mock_type=="3":
             surgery.type_3_server(data)
             return  json.dumps(eval(data)['response_succ'])
             pass
-        elif mock_type==4:
+        elif mock_type==4 or mock_type=="4":
             surgery.type_4_server(data)
             return  json.dumps(eval(data)['response_succ'])
             pass
 
-       #return  json.dumps(eval(data)['response'])
+        return  '{"code":0}'
     @app.route('/mockstop',methods=["POST"])
     
     def mockstop():
         data=request.get_data()
+        print eval(data)
         mock_type=eval(data)['type']
         surgery.clear(eval(data)['port'])
         return json.dumps(eval(data)['response'])
