@@ -1,15 +1,25 @@
-<template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
-  </div>
+<template> 
+      <router-view></router-view>
 </template>
 
 <script>
+
+import router from './router';
 export default {
-  name: 'App'
+  name: 'app',
+   data() {
+      return {
+        
+      }
+    },
+  created () {
+        router.push({name: 'mock'});
+    }
+  
 }
 </script>
+
+
 
 <style>
 #app {
