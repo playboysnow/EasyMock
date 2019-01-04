@@ -147,6 +147,9 @@ eg:
         #js_data=json.loads(data)
         #js_data=yaml.safe_load(data)
         #print js_data
+        
+        surgery.api_start(data)
+        '''
         mock_type=eval(data)['type']
         #根据不同类型执行不同类型文件
         if mock_type==1 or mock_type=="1":
@@ -174,7 +177,7 @@ eg:
             surgery.type_4_server(data)
             return  json.dumps(eval(data)['response_succ'])
             pass
-
+        '''
         return  '{"code":0}'
     @app.route('/mockstop',methods=["POST"])
     

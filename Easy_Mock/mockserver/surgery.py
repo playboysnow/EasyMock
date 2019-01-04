@@ -301,4 +301,27 @@ class surgery(object):
             self.type_4_server(j_data)
             return  json.dumps(eval(data)['response_succ'])
             pass
-    
+    def api_start(self,data):
+        j_data=eval(data)
+        #print type(eval(j_data))
+        mock_type=j_data['type']
+        #根据不同类型执行不同类型文件
+        if mock_type==1 or mock_type=="1":
+            self.type_1_server(j_data)
+           
+            return  json.dumps(eval(data)['response'])
+            
+        elif mock_type==2 or mock_type=="2":
+            #调用
+            #surgery.system(type_2_file,eval(data))
+            self.type_2_server(j_data)
+            return  json.dumps(eval(data)['response'])
+            pass
+        elif mock_type==3 or mock_type=="3":
+            self.type_3_server(j_data)
+            return  json.dumps(eval(data)['response_succ'])
+            pass
+        elif mock_type==4 or mock_type=="4":
+            self.type_4_server(j_data)
+            return  json.dumps(eval(data)['response_succ'])
+            pass
