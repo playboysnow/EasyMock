@@ -68,7 +68,7 @@
   </div>
   <div class="selectDiv">
   <el-form-item label="响应一">
-    <el-input type="textarea" style="width:300px" :autosize="{ minRows: 4, maxRows: 8}" v-model="form.response_succ" placeholder="类型一类型二 只使用响应一"></el-input>
+    <el-input type="textarea" style="width:300px" :autosize="{ minRows: 4, maxRows: 8}" v-model="form.response" placeholder="类型一类型二 只使用响应一"></el-input>
   </el-form-item>
   </div>
   <div class="selectDiv">
@@ -163,7 +163,7 @@ todo:
           sleeptime: '',
           method:'',
           type:'',
-          response_succ:'',
+          response:'',
           response_fail:''
         },
        table:[],
@@ -178,7 +178,7 @@ todo:
           sleeptime:this.sleeptime,
           method:this.method,
           type:this.type,
-          response_succ:this.response,
+          response:this.response,
           response_fail:this.response_fail
         }
         for (var tb of this.table){
