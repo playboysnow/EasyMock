@@ -161,7 +161,7 @@ todo:
           url: '',
           port: '',
           sleeptime: '',
-          method:'',
+          method:[],
           type:'',
           response:'',
           response_fail:''
@@ -204,32 +204,42 @@ todo:
       },
       add: function(){
         /*this.table.append()*/
-         this.$http.post('/api/mockstart',this.form).then(response => {
-          response = response.body;
-          if (response.code==0){
-            this.$alert("启动失败",'提示', {
-          confirmButtonText: '确定', 
-            })
+          var data={
+            url:this.url,
+          port:this.port,
+          sleeptime:this.sleeptime,
+          method:this.method,
+          type:this.type,
+          response:this.response,
+          response_fail:this.response_fail
           }
-        else {
           this.$alert("启动成功",'提示', {
           confirmButtonText: '确定', 
           })
-        }
-          this.$alert(this.form,'提示', {
+         this.$http.post('/api/mockstart',this.form).then(response => {
+          response = response.body;
+          
+          if (response.code==0){
+            this.$alert("服务关闭",'提示', {
+          confirmButtonText: '确定', 
+            })
+          }
+        
+        
+         /* this.$alert(this.form,'提示', {
           confirmButtonText: '确定',  
           callback: action => {
               this.form={
           url: '',
           port: '',
           sleeptime: '',
-          method:'',
+          method:[],
           type:'',
-          response_succ:'',
+          response:'',
           response_fail:''
         };
           }     
-        });
+        });*/
          })
       },
         

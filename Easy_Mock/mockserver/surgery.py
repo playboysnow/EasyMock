@@ -141,6 +141,7 @@ class surgery(object):
         #host=s_data['host']
         
         port=s_data['port']
+        #print port
         app=Flask(__name__)
         @app.route(url,methods=method)
     
@@ -148,10 +149,10 @@ class surgery(object):
             time.sleep(sleeptime/1000)
             return  json.dumps(response)
         def run(debug=False):
-            try:
+            #try:
                 app.run(host=self.host,port=port,debug=debug)
-            except:
-                print "启动失败，检查端口是否被占用"
+            #except:
+               # print "启动失败，检查端口是否被占用"
         run()
         return True
         pass
