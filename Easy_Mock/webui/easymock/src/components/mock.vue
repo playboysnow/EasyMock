@@ -95,6 +95,8 @@
         <span style="margin-left: 10px">{{ scope.row.date }}</span>
       </template> -->
     </el-table-column>
+    <el-table-column prop="method" label="请求方式" >
+      </el-table-column>
     <el-table-column prop="desc" label="描述" >
       <!-- <template slot-scope="scope">
         <el-popover trigger="hover" placement="top">
@@ -181,7 +183,9 @@ todo:
         for (var val of this.table){
           console.log(val)
           //  val.url='ip地址'+':'+this.form.port+this.form.port
-           val.desc='根据机器实际ip地址进行访问使用；'+val.url
+          val.url='http://xxx.xx.xx.xx:'+val.port+val.url
+          
+           val.desc='根据机器实际ip地址进行访问使用；'+val.url+'响应格式：'+val.response_succ
           
         /*
           if (val.type === 1 || 3){
@@ -220,9 +224,9 @@ todo:
           this.F_table.push(data)
           console.log(this.F_table)
           this.table=this.F_table
-          this.$alert("启动成功",'提示', {
-          confirmButtonText: '确定', 
-          })
+          // this.$alert("启动成功",'提示', {
+          // confirmButtonText: '确定', 
+          // })
         //  this.$http.post('/api/mockstart',this.form).then(response => {
         //   response = response.body;
           
