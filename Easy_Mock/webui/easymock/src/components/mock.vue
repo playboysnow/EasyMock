@@ -13,7 +13,7 @@
      <el-main>
   <div class="configArea">
   
-  <el-form inline="true"  ref="form" :model="form" >
+  <el-form inline=true  ref="form" :model="form" >
     <div class="selectDiv">
   <el-form-item label="接口URL">
     <el-input v-model="form.url" placeholder="类似于/login" ></el-input>
@@ -90,13 +90,13 @@
 
 <el-table :data="tableData" >
     <el-table-column prop="url" label="接口URL" >
-      <template slot-scope="scope">
+      <!-- <template slot-scope="scope">
         <i class="el-icon-time"></i>
         <span style="margin-left: 10px">{{ scope.row.date }}</span>
-      </template>
+      </template> -->
     </el-table-column>
     <el-table-column prop="desc" label="描述" >
-      <template slot-scope="scope">
+      <!-- <template slot-scope="scope">
         <el-popover trigger="hover" placement="top">
           <p>URL: {{ scope.row.name }}</p>
           <p>response: {{ scope.row.address }}</p>
@@ -104,12 +104,10 @@
             <el-tag size="medium">{{ scope.row.name }}</el-tag>
           </div>
         </el-popover>
-      </template>
+      </template> -->
     </el-table-column>
-    <el-table-column label="状态">
-      <template slot-scope="scope">
-        <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-        <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+    <el-table-column prop="status" label="状态">
+      <template  slot-scope="scope">
         <el-switch
   style="display: block"
   v-model="server_start"
@@ -118,7 +116,13 @@
   active-text="启动"
   inactive-text="停止"
   @change="start">
-</el-switch>
+      </el-switch>
+      </template>  
+      </el-table-column>
+    <el-table-column prop="modify" label="操作">
+      <template slot-scope="scope">
+        <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+        <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
       </template>  
     </el-table-column>
   </el-table>
@@ -167,31 +171,30 @@ todo:
           response_fail:''
         },
        table:[],
-       server_start:false
+       server_start:false,
+       F_table:[]
       }
     },
     computed: {
       tableData: function(){
-        var postdata={
-          url:this.url,
-          port:this.port,
-          sleeptime:this.sleeptime,
-          method:this.method,
-          type:this.type,
-          response:this.response,
-          response_fail:this.response_fail
-        }
-        for (var tb of this.table){
-          if (this.type === 1 || 3){
+        
+        for (var val of this.table){
+          console.log(val)
+          //  val.url='ip地址'+':'+this.form.port+this.form.port
+           val.desc='根据机器实际ip地址进行访问使用；'+val.url
+          
+        /*
+          if (val.type === 1 || 3){
             tb.url='http://'+'ip'+':'+this.port+this.url
           tb.desc=""
           }
-          else if (this.type===2 ||4){
+          else if (val.type===2 ||4){
           tb.url='http://'+'ip'+':'+this.port+this.url+'/XXX'
           tb.desc=""
           }
-          tb.data=this.postdata
+        */  
         }
+
       return this.table
       }
     },
@@ -205,25 +208,29 @@ todo:
       add: function(){
         /*this.table.append()*/
           var data={
-            url:this.url,
-          port:this.port,
-          sleeptime:this.sleeptime,
-          method:this.method,
-          type:this.type,
-          response:this.response,
-          response_fail:this.response_fail
+            url:this.form.url,
+          port:this.form.port,
+          sleeptime:this.form.sleeptime,
+          method:this.form.method,
+          type:this.form.type,
+          response:this.form.response,
+          response_fail:this.form.response_fail
           }
+          console.log(data)
+          this.F_table.push(data)
+          console.log(this.F_table)
+          this.table=this.F_table
           this.$alert("启动成功",'提示', {
           confirmButtonText: '确定', 
           })
-         this.$http.post('/api/mockstart',this.form).then(response => {
-          response = response.body;
+        //  this.$http.post('/api/mockstart',this.form).then(response => {
+        //   response = response.body;
           
-          if (response.code==0){
-            this.$alert("服务关闭",'提示', {
-          confirmButtonText: '确定', 
-            })
-          }
+        //   if (response.code==0){
+        //     this.$alert("服务关闭",'提示', {
+        //   confirmButtonText: '确定', 
+        //     })
+        //   }
         
         
          /* this.$alert(this.form,'提示', {
@@ -240,7 +247,7 @@ todo:
         };
           }     
         });*/
-         })
+         //})
       },
         
       
