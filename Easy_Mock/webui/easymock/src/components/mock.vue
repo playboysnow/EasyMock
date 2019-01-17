@@ -88,7 +88,7 @@
 
 <div class="tablelist">
 
-<el-table :data="tableData" >
+<el-table :data="tableData" @row-click="get_row_info">
     <el-table-column prop="url" label="接口URL" >
       <!-- <template slot-scope="scope">
         <i class="el-icon-time"></i>
@@ -203,7 +203,9 @@ todo:
       }
     },
     methods: {
-
+      get_row_info(row,event,column){
+        console.log(row.url)
+      },
       start: function(){
         if (this.server_start===true){
           this.$http.post('/mockstart',this.tableData[index].postdata)
