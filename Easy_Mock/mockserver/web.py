@@ -15,6 +15,10 @@ reload(sys)
 sys.setdefaultencoding('UTF-8')
 surgery=surgery()
 #sys.setdefaultencoding('gb2312')
+
+from gevent import monkey
+from gevent.pywsgi import WSGIServer
+monkey.patch_all()
 """
 1、可以使用闭包解决 python 文件的形式：   done
 比如
@@ -222,7 +226,7 @@ eg:
         pass
     
     def run(debug=False):
-        app.run(host=host,port=port,debug=debug)
+        app.run(host=host,port=port,debug=debug,threaded=True)
         pass
     
     
