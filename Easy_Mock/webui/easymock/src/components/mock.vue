@@ -218,7 +218,7 @@ todo:
         console.log(index,row)
         var pdata={
             url:row.url,
-          port:row.port,
+          port:parseInt(row.port),
           sleeptime:row.sleeptime,
           method:row.method,
           type:row.type,
@@ -229,10 +229,16 @@ todo:
         if (this.server_start===true){
         console.log(pdata)
         this.$http.post('/api/mockstart',pdata).then(response => {
+          this.$alert("启动成功",'提示', {
+          confirmButtonText: '确定', 
+           })
         })
         }
        else if (this.server_start===false){
          this.$http.post('/api/mockstop',pdata).then(response => {
+           this.$alert("关闭成功",'提示', {
+          confirmButtonText: '确定', 
+           })
         })
        }
       },
