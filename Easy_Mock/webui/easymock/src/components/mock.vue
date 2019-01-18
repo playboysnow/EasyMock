@@ -97,6 +97,8 @@
     </el-table-column>
     <el-table-column prop="method" label="请求方式" >
       </el-table-column>
+      <el-table-column prop="type" label="类型" >
+      </el-table-column>
     <el-table-column prop="desc" label="描述" >
       <!-- <template slot-scope="scope">
         <el-popover trigger="hover" placement="top">
@@ -117,7 +119,7 @@
   inactive-color="#ff4949"
   active-text="启动"
   inactive-text="停止"
-  @change="start">
+  @change="start(scope.$index, scope.row)">
       </el-switch>
       </template>  
       </el-table-column>
@@ -181,38 +183,62 @@ todo:
       tableData: function(){
         
         for (var val of this.table){
-          console.log(val)
+          //console.log(val)
           //  val.url='ip地址'+':'+this.form.port+this.form.port
-          val.url='http://xxx.xx.xx.xx:'+val.port+val.url
+          //val.url='http://xxx.xx.xx.xx:'+val.port+val.url
           
-           val.desc='根据机器实际ip地址进行访问使用；'+val.url+'响应格式：'+val.response_succ
+           //val.desc='根据机器实际ip地址进行访问使用；'+val.url+'响应格式：'+val.response_succ
+          //console.log(val.type)
           
-        /*
-          if (val.type === 1 || 3){
-            tb.url='http://'+'ip'+':'+this.port+this.url
-          tb.desc=""
+          if (val.type === "1" || val.type === "3"){
+            //val.url='http://xxx.xx.xx.xx:'+val.port+val.url
+            var u_add='http://xxx.xx.xx.xx:'+val.port+val.url
+          val.desc='根据机器实际ip地址进行访问使用；'+u_add+'响应格式：'+val.response_succ
           }
-          else if (val.type===2 ||4){
-          tb.url='http://'+'ip'+':'+this.port+this.url+'/XXX'
-          tb.desc=""
+          else if (val.type==="2" || val.type=== "4"){
+
+          var u_add='http://xxx.xx.xx.xx:'+val.port+val.url+'/XXX'
+         val.desc='根据机器实际ip地址进行访问使用；'+u_add+'响应格式：'+val.response_succ
           }
-        */  
+        
         }
 
       return this.table
       }
     },
     methods: {
-      get_row_info(row,event,column){
-        console.log(row.url)
+      get_row_info(row){
+        //console.log(row.url)
+        return row
       },
-      start: function(){
+      handleDelete(index, row) {
+        //console.log(index, row);
+      },
+      start(index,row){
+        console.log(index,row)
+        var pdata={
+            url:row.url,
+          port:row.port,
+          sleeptime:row.sleeptime,
+          method:row.method,
+          type:row.type,
+          response:row.response,
+          response_fail:row.response_fail
+          }
+        //console.log(row)
         if (this.server_start===true){
-          this.$http.post('/mockstart',this.tableData[index].postdata)
+        console.log(pdata)
+        this.$http.post('/api/mockstart',pdata).then(response => {
+        })
         }
+       else if (this.server_start===false){
+         this.$http.post('/api/mockstop',pdata).then(response => {
+        })
+       }
       },
+     
       add: function(){
-        /*this.table.append()*/
+        
           var data={
             url:this.form.url,
           port:this.form.port,
@@ -222,9 +248,9 @@ todo:
           response:this.form.response,
           response_fail:this.form.response_fail
           }
-          console.log(data)
+          //console.log(data)
           this.F_table.push(data)
-          console.log(this.F_table)
+          //console.log(this.F_table)
           this.table=this.F_table
           // this.$alert("启动成功",'提示', {
           // confirmButtonText: '确定', 
