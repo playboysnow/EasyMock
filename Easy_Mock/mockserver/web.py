@@ -215,16 +215,21 @@ eg:
     def send_sms():
         """发送验证码"""
         data=request.get_data()
-        surgery.send(data)
-        surgery.cron()
-        pass
+        if surgery.send(data):
+            #surgery.cron()
+            return "发送验证码成功"
+        #surgery.cron()
+        else:
+            return "发送失败"
+        
     @app.route('/login',methods=['POST'])
     def login():
         """验证登陆逻辑"""
         data=request.get_data()
-        surgery.login(data)
-        pass
-    
+        if surgery.login(data):
+            return "login success!!!"
+        else:
+            return "验证失败"
     def run(debug=False):
         app.run(host=host,port=port,debug=debug,threaded=True)
         pass

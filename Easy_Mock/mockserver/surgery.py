@@ -19,10 +19,11 @@ reload(sys)
 sys.setdefaultencoding('UTF-8')
 #sys.setdefaultencoding('gb2312')
 
+sms_num=[]
 
 class surgery(object):
-    global sms_num
-    sms_num=[]
+    #global sms_num
+    #sms_num=[123]
     def __init__(self):
         self.res_succ={"code":0,"message":"server start succ"}
         self.res_fail={"code":1,"message":"server start fail"}
@@ -49,7 +50,7 @@ class surgery(object):
             #print 'taskkill /im   python2.exe   /t  /f ' 
             #code=os.system('taskkill /im   python2.exe   /t  /f  ' )
             print "start"
-            pid=os.popen('start  /b  netstat  -ano |findstr %s ' % port).read()[-7:-1].replace(" ","")
+            pid=os.popen('start  /b  netstat  -ano |findstr %s |findstr LISTENING' % port).read()[-7:-1].replace(" ","")
             print pid
             code=os.system('start  /b  taskkill /pid  %s /t  /f' % pid)
                 #print self.res_fail
@@ -76,7 +77,7 @@ class surgery(object):
     def send(self,data):
         """
         data={
-            phonehum:123,
+            phonenum:123,
 
         }
         """
@@ -84,16 +85,19 @@ class surgery(object):
          # appid="140016XXXXX"
         appid="	1400162404"
         #appkey="9993bac2a2b15aXXX"
-        appkey="9993bac2a2b15a202bd718ea"
-        template_id=""
-        sms_code=self.get_random_code
+        appkey="202bd718ea2e40d33d"
+        template_id="236414"
+        sms_code=self.get_random_code()
         sms_num.append(sms_code)
         ssender = SmsSingleSender(appid, appkey)
         try:
         #print data['remobile'],data['text']
+            data=self.json_to_dict(data)
+            print type(data)
             result = ssender.send_with_param(86, data["phonenum"],
             template_id,[sms_code,'1'], extend="", ext="")
-            if result['code']==0:
+            print result
+            if result['result']==0:
                 print sms_code,sms_num
                 return True
         except HTTPError as e:
@@ -111,6 +115,7 @@ class surgery(object):
         data=self.json_to_dict(data)
         if data['sms_code']  in sms_num:
             sms_num.pop()#清理
+            print "login success"
             return  True
             pass
     def get_random_code(self):
